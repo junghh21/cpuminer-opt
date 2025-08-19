@@ -39,7 +39,6 @@
  */
 
 #if defined(__SSE2__) || defined(__aarch64__)
-
 #include "simd-utils.h"
 
 #ifndef _YESPOWER_OPT_C_PASS_
@@ -1067,7 +1066,7 @@ int yespower(yespower_local_t *local,
    ctx.S0 = S;
    ctx.S1 = S + Swidth_to_Sbytes1( Swidth );
 
-   if ( srclen == 80 )   // assume 64 byte prehash was done
+   if (0)//( srclen == 80 )   // assume 64 byte prehash was done
    {
      memcpy( &sha256_ctx, &sha256_prehash_ctx, sizeof sha256_ctx );
      sha256_update( &sha256_ctx, src+64, srclen-64 );
@@ -1080,17 +1079,17 @@ int yespower(yespower_local_t *local,
    {
       PBKDF2_SHA256( sha256, sizeof(sha256), src, srclen, 1, B, B_size );
 
-      if ( work_restart[thrid].restart ) return 0;
+      //if ( work_restart[thrid].restart ) return 0;
    
       memcpy( sha256, B, sizeof(sha256) );
       smix( B, r, N, V, XY, &ctx );
 
-      if ( work_restart[thrid].restart ) return 0;
+      //if ( work_restart[thrid].restart ) return 0;
 
       PBKDF2_SHA256( sha256, sizeof(sha256), B, B_size, 1, (uint8_t *)dst,
                      sizeof(*dst) );
 
-      if ( work_restart[thrid].restart ) return 0;
+      //if ( work_restart[thrid].restart ) return 0;
 
       if ( pers )
       {
@@ -1117,11 +1116,11 @@ int yespower(yespower_local_t *local,
       PBKDF2_SHA256( sha256, sizeof(sha256), src, srclen, 1, B, 128 );
       memcpy( sha256, B, sizeof(sha256) );
 
-      if ( work_restart[thrid].restart ) return 0;
+      //if ( work_restart[thrid].restart ) return 0;
 
       smix_1_0( B, r, N, V, XY, &ctx );
 
-      if ( work_restart[thrid].restart ) return 0;
+      //if ( work_restart[thrid].restart ) return 0;
 
       HMAC_SHA256_Buf( B + B_size - 64, 64, sha256, sizeof(sha256),
                        (uint8_t *)dst );
