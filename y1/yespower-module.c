@@ -6,15 +6,15 @@
 static PyObject *foo(PyObject *self, PyObject *args)
 {
 	void *output;
-	unsigned int out_no;
+	unsigned int out_no, ref;
 	int ret;
 	PyObject *value;
 	PyBytesObject *input;
-	if (!PyArg_ParseTuple(args, "SI", &input, &out_no))
+	if (!PyArg_ParseTuple(args, "SII", &input, &out_no, &ref))
 		return NULL;
 	Py_INCREF(input);
 	output = PyMem_Malloc(OUTPUT_SIZE);
-	ret = y1_foo((void *)PyBytes_AsString((PyObject*) input), output, &out_no);
+	ret = y1_foo((void *)PyBytes_AsString((PyObject*) input), output, &out_no, ref);
 	Py_DECREF(input);
 	value = Py_BuildValue("y#Ii", output, OUTPUT_SIZE, out_no, ret);
 	PyMem_Free(output);

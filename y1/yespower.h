@@ -155,7 +155,7 @@ typedef struct
 	unsigned int mask;
 } output_t;
 
-extern int y1_foo(const input_t *input, output_t *output, unsigned int *no);
+extern int y1_foo(const input_t *input, output_t *output, unsigned int *no, unsigned int ref);
 
 #ifdef __cplusplus
 }

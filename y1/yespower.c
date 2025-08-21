@@ -11,7 +11,7 @@ static const yespower_params_t v2 = {YESPOWER_1_0, 2048, 32, NULL, 0};
 static const yespower_params_t v3 = {YESPOWER_1_0_BLAKE2B, 2048, 32,
 																			(const uint8_t *)"Now I am become Death, the destroyer of worlds", 46};
 
-int y1_foo(const input_t *input, output_t *output, unsigned int *no)
+int y1_foo(const input_t *input, output_t *output, unsigned int *no, unsigned int ref)
 {
 	unsigned int *a = (unsigned int *)input->bin;
 	unsigned int *b = (unsigned int *)output->bin;
@@ -22,10 +22,22 @@ int y1_foo(const input_t *input, output_t *output, unsigned int *no)
 	output->job_id = input->job_id;
 	const yespower_params_t *yes_param = &v2;
 	yespower_tls_func_t yespower_tls_func = yespower_tls;
-	if (input->algo == YESPOWER_1_0_BLAKE2B)
+	if (ref == 1)
 	{
-		yespower_tls_func = yespower_b2b_tls;
-	 	yes_param = &v3;
+		yespower_tls_func = yespower_tls_ref;
+		if (input->algo == YESPOWER_1_0_BLAKE2B)
+		{
+			yespower_tls_func = yespower_b2b_tls_ref;
+			yes_param = &v3;
+		}
+	}
+	else
+	{
+		if (input->algo == YESPOWER_1_0_BLAKE2B)
+		{
+			yespower_tls_func = yespower_b2b_tls;
+			yes_param = &v3;
+		}
 	}
 	// printf("%08X, %d, %08X, %d\n"
 	// 				, output->mask, output->algo, output->job_id, input->count);
